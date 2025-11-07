@@ -223,9 +223,15 @@ def generate_content():
         return jsonify({'success': True, 'content': content})
         
     except AIServiceError as e:
+        print(f"AI Service Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
     except Exception as e:
-        return jsonify({'error': 'Failed to generate content'}), 500
+        print(f"Error generating content: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Failed to generate content: {str(e)}'}), 500
 
 
 # Chat with AI assistant
@@ -261,9 +267,15 @@ def chat():
         return jsonify({'success': True, 'response': response})
         
     except AIServiceError as e:
+        print(f"AI Service Error in chat: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
     except Exception as e:
-        return jsonify({'error': 'Failed to get response'}), 500
+        print(f"Error in chat: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Failed to get response: {str(e)}'}), 500
 
 # Delete an idea
 @app.route('/api/ideas/<int:idea_id>', methods=['DELETE'])
