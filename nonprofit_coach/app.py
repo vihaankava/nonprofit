@@ -405,4 +405,5 @@ def test_get_volunteers(idea_id):
 if __name__ == '__main__':
     # Use PORT from environment variable for deployment, or 5001 for local
     port = int(os.environ.get('PORT', 5001))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    app.run(debug=debug, host='0.0.0.0', port=port)
