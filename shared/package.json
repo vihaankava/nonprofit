@@ -1,0 +1,14 @@
+{
+  "name": "@nonprofit-idea-coach/shared",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types and interfaces for Nonprofit Idea Coach",
+  "main": "types/index.ts",
+  "types": "types/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0"
+  }
+}

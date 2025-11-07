@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - Social Startup Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Website is Ready!</h1>
+            <p>We've created a personalized website for your social startup</p>
+        </header>
+
+        <main>
+            <div class="success-section">
+                <h2>What's Next?</h2>
+                <p>Your personalized website includes four sections to help you launch your social venture:</p>
+                
+                <ul class="features-list">
+                    <li><strong>Marketing:</strong> Create emails, flyers, and promotional materials</li>
+                    <li><strong>Team Building:</strong> Develop recruiting materials and manage volunteers</li>
+                    <li><strong>Funding:</strong> Generate grant proposals and donor communications</li>
+                    <li><strong>Research:</strong> Get implementation steps and find local resources</li>
+                </ul>
+
+                <a href="/site/{{ idea_id }}" class="button">Visit Your Website</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

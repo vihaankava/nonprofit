@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nonprofit AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            display: flex;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .assistant-message {
+            background: white;
+            border: 1px solid #e0e0e0;
+            margin-right: auto;
+        }
+
+        .generated-image {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .generated-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .image-info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chat-input button {
+            padding: 15px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-input button:hover {
+            background: #45a049;
+        }
+
+        .chat-input button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .suggestion {
+            background: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .suggestion:hover {
+            background: #e0e0e0;
+        }
+
+        .examples {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .examples h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .example-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .example-card h4 {
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+
+        .example-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Nonprofit AI Assistant</h1>
+            <p>Create custom posters, flyers, and materials for your nonprofit - just ask!</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant-message">
+                    <strong>AI Assistant:</strong> Hi! I'm your nonprofit AI assistant. I can create custom posters, flyers, banners, and other materials for your organization. Just tell me what you need!
+                    
+                    <div class="suggestions">
+                        <div class="suggestion" onclick="sendMessage('Create a colorful poster for my animal rescue')">🐾 Animal Rescue Poster</div>
+                        <div class="suggestion" onclick="sendMessage('Design a modern flyer for my food bank')">🍞 Food Bank Flyer</div>
+                        <div class="suggestion" onclick="sendMessage('Make a professional banner for my environmental nonprofit')">🌱 Environmental Banner</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Ask me to create a poster, flyer, banner, or any nonprofit material..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" id="sendButton">Send</button>
+            </div>
+        </div>
+
+        <div class="examples">
+            <h3>💡 Try These Examples:</h3>
+            <div class="example-grid">
+                <div class="example-card" onclick="sendMessage('Create a volunteer recruitment poster for my homeless shelter')">
+                    <h4>🏠 Volunteer Poster</h4>
+                    <p>Generate recruitment materials for volunteers</p>
+                </div>
+                <div class="example-card" onclick="sendMessage('Design a fundraising flyer for my education nonprofit')">
+                    <h4>📚 Fundraising Flyer</h4>
+                    <p>Create compelling fundraising materials</p>
+                </div>
+                <div class="example-card" onclick="sendMessage('Make a social media graphic for my community cleanup event')">
+                    <h4>🧹 Event Graphics</h4>
+                    <p>Design social media ready graphics</p>
+                </div>
+                <div class="example-card" onclick="sendMessage('Create a professional logo for my health nonprofit')">
+                    <h4>⚕️ Logo Design</h4>
+                    <p>Generate custom nonprofit logos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8002/api';
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage(predefinedMessage = null) {
+            const input = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            const message = predefinedMessage || input.value.trim();
+            if (!message) return;
+
+            // Clear input and disable button
+            input.value = '';
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<div class="spinner"></div>';
+
+            // Add user message
+            addMessage(message, 'user');
+
+            // Add loading message
+            const loadingId = addMessage('<div class="loading"><div class="spinner"></div> Creating your design...</div>', 'assistant');
+
+            try {
+                // Call the chat API
+                const response = await fetch(`${API_BASE}/chat/demo?message=${encodeURIComponent(message)}`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                // Remove loading message
+                document.getElementById(loadingId).remove();
+
+                // Add assistant response
+                let responseHtml = `<strong>AI Assistant:</strong> ${data.message.content}`;
+
+                // Add generated images if any
+                if (data.message.metadata && data.message.metadata.generated_images) {
+                    for (const image of data.message.metadata.generated_images) {
+                        responseHtml += `
+                            <div class="generated-image">
+                                <img src="${image.image_url}" alt="${image.title}" />
+                                <div class="image-info">
+                                    <strong>${image.title}</strong><br>
+                                    Style: ${image.style}<br>
+                                    Type: ${image.image_type}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Add suggestions
+                if (data.suggestions && data.suggestions.length > 0) {
+                    responseHtml += '<div class="suggestions">';
+                    for (const suggestion of data.suggestions.slice(0, 4)) {
+                        responseHtml += `<div class="suggestion" onclick="sendMessage('${suggestion}')">${suggestion}</div>`;
+                    }
+                    responseHtml += '</div>';
+                }
+
+                addMessage(responseHtml, 'assistant');
+
+            } catch (error) {
+                // Remove loading message
+                document.getElementById(loadingId).remove();
+                addMessage(`<strong>Error:</strong> Sorry, I encountered an error: ${error.message}`, 'assistant');
+            }
+
+            // Re-enable button
+            sendButton.disabled = false;
+            sendButton.innerHTML = 'Send';
+        }
+
+        function addMessage(content, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            const messageId = 'msg-' + Date.now();
+            messageDiv.id = messageId;
+            messageDiv.className = `message ${type}-message`;
+            
+            if (type === 'user') {
+                messageDiv.innerHTML = `<strong>You:</strong> ${content}`;
+            } else {
+                messageDiv.innerHTML = content;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            return messageId;
+        }
+
+        // Focus on input when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html>

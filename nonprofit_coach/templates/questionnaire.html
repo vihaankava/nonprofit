@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idea Development - Social Startup Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Social Startup Coach Logo" class="logo">
+            <h1>Social Startup Coach</h1>
+            <p class="subtitle">Develop Your Social Startup</p>
+            <p>Answer these questions to describe your social cause</p>
+            <a href="/api/logout" class="logout-link">Change API Key</a>
+        </header>
+
+        <main>
+            <div class="questionnaire">
+                <form id="questionnaire-form">
+                    <div class="question-section">
+                        <label for="description">What is your social startup idea?</label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            rows="4" 
+                            placeholder="Describe your social impact idea..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="question-section">
+                        <label for="importance">Why is this idea important?</label>
+                        <textarea 
+                            id="importance" 
+                            name="importance" 
+                            rows="4" 
+                            placeholder="Explain the significance of your cause..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="question-section">
+                        <label for="beneficiaries">Who will benefit from this social venture?</label>
+                        <textarea 
+                            id="beneficiaries" 
+                            name="beneficiaries" 
+                            rows="4" 
+                            placeholder="Describe your target beneficiaries..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="question-section">
+                        <label for="implementation">How will you implement this idea?</label>
+                        <textarea 
+                            id="implementation" 
+                            name="implementation" 
+                            rows="4" 
+                            placeholder="Describe your implementation approach..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="question-section">
+                        <label for="significance">What makes this idea significant?</label>
+                        <textarea 
+                            id="significance" 
+                            name="significance" 
+                            rows="4" 
+                            placeholder="Explain the impact and significance..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="question-section">
+                        <label for="uniqueness">What makes your approach unique?</label>
+                        <textarea 
+                            id="uniqueness" 
+                            name="uniqueness" 
+                            rows="4" 
+                            placeholder="Describe what sets your idea apart..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div id="follow-up-questions"></div>
+
+                    <button type="submit">Complete & Generate Website</button>
+                </form>
+
+                <div id="loading" class="loading hidden">
+                    <p>Processing your responses...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

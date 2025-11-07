@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Startup Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Social Startup Coach</h1>
+            <p class="subtitle">Transform your social cause ideas into actionable nonprofit startups</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="all-ideas">All Ideas</button>
+            <button class="tab-button" data-tab="new-idea">New Idea</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- All Ideas Tab -->
+            <div id="all-ideas" class="tab-pane active">
+                <div class="ideas-grid">
+                    {% if ideas %}
+                        {% for idea in ideas %}
+                        <div class="idea-card" id="idea-{{ idea.id }}">
+                            <button class="delete-btn" onclick="deleteIdea({{ idea.id }})" title="Delete this idea">×</button>
+                            <h3>{{ idea.title or 'Untitled Idea' }}</h3>
+                            <p class="idea-description">{{ idea.description[:150] }}{% if idea.description and idea.description|length > 150 %}...{% endif %}</p>
+                            <div class="idea-meta">
+                                <span class="status status-{{ idea.status }}">{{ idea.status }}</span>
+                                <span class="date">{{ idea.created_at[:10] }}</span>
+                            </div>
+                            {% if idea.status == 'complete' %}
+                            <a href="/site/{{ idea.id }}" class="btn btn-primary">Start Building</a>
+                            {% else %}
+                            <a href="/questionnaire?idea_id={{ idea.id }}" class="btn btn-secondary">Continue</a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <p>No ideas yet. Create your first nonprofit idea!</p>
+                            <button class="btn btn-primary" onclick="switchTab('new-idea')">Get Started</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- New Idea Tab -->
+            <div id="new-idea" class="tab-pane">
+                <div class="questionnaire-container">
+                    <!-- API Key Setup -->
+                    <div id="api-setup" class="setup-section">
+                        <h2>Get Started</h2>
+                        <p>To use the AI-powered coaching features, you'll need an Anthropic API key.</p>
+                        <div class="form-group">
+                            <label for="api-key">Anthropic API Key</label>
+                            <input type="password" id="api-key" placeholder="sk-ant-..." />
+                            <small>Your API key is stored in your session for this visit.</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="save-api-key" />
+                                Save API key with this idea (so you don't have to re-enter it later)
+                            </label>
+                            <small>If checked, your API key will be stored securely in the database for this nonprofit idea only.</small>
+                        </div>
+                        <button class="btn btn-primary" onclick="setupApiKey()">Start Questionnaire</button>
+                        <p class="help-text">
+                            Don't have an API key? <a href="https://console.anthropic.com/" target="_blank">Get one here</a>
+                        </p>
+                    </div>
+
+                    <!-- Questionnaire -->
+                    <div id="questionnaire" class="questionnaire-section" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Question 1 of 7</div>
+
+                        <form id="questionnaire-form" autocomplete="off">
+                            <!-- Question 1: Title -->
+                            <div class="question active" data-question="1">
+                                <h3>What's the name of your nonprofit idea?</h3>
+                                <input type="text" name="title" id="title" placeholder="e.g., Community Homeless Support" required autocomplete="off" />
+                            </div>
+
+                            <!-- Question 2: Description -->
+                            <div class="question" data-question="2">
+                                <h3>Describe your nonprofit idea</h3>
+                                <textarea name="description" id="description" rows="4" placeholder="What problem are you trying to solve?" required autocomplete="off"></textarea>
+                                <div id="followup-2" class="followup-question"></div>
+                            </div>
+
+                            <!-- Question 3: Importance -->
+                            <div class="question" data-question="3">
+                                <h3>Why is this cause important?</h3>
+                                <textarea name="importance" id="importance" rows="4" placeholder="Why does this matter?" required autocomplete="off"></textarea>
+                                <div id="followup-3" class="followup-question"></div>
+                            </div>
+
+                            <!-- Question 4: Beneficiaries -->
+                            <div class="question" data-question="4">
+                                <h3>Who will benefit from this nonprofit?</h3>
+                                <textarea name="beneficiaries" id="beneficiaries" rows="4" placeholder="Who are you helping?" required autocomplete="off"></textarea>
+                                <div id="followup-4" class="followup-question"></div>
+                            </div>
+
+                            <!-- Question 5: Implementation -->
+                            <div class="question" data-question="5">
+                                <h3>How will you implement this idea?</h3>
+                                <textarea name="implementation" id="implementation" rows="4" placeholder="What's your approach?" required autocomplete="off"></textarea>
+                                <div id="followup-5" class="followup-question"></div>
+                            </div>
+
+                            <!-- Question 6: Significance -->
+                            <div class="question" data-question="6">
+                                <h3>What impact will this have?</h3>
+                                <textarea name="significance" id="significance" rows="4" placeholder="What change will you create?" required autocomplete="off"></textarea>
+                                <div id="followup-6" class="followup-question"></div>
+                            </div>
+
+                            <!-- Question 7: Uniqueness -->
+                            <div class="question" data-question="7">
+                                <h3>What makes your approach unique?</h3>
+                                <textarea name="uniqueness" id="uniqueness" rows="4" placeholder="What sets you apart?" required autocomplete="off"></textarea>
+                                <div id="followup-7" class="followup-question"></div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="question-nav">
+                                <button type="button" class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" style="display: none;">Previous</button>
+                                <button type="button" class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next</button>
+                                <button type="button" class="btn btn-primary" id="submit-btn" onclick="submitQuestionnaire()" style="display: none;">Generate Website</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loading" class="loading-section" style="display: none;">
+                        <div class="spinner"></div>
+                        <h3>Creating your nonprofit website...</h3>
+                        <p>This may take a moment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

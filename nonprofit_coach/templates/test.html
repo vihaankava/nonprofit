@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Test - Nonprofit Idea Coach</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #333; }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { border-left-color: #28a745; }
+        .error { border-left-color: #dc3545; }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Database Test Interface - Tasks 1 & 2</h1>
+    
+    <div class="test-section">
+        <h2>1. Create New Idea</h2>
+        <label>Title:</label>
+        <input type="text" id="ideaTitle" value="Community Food Bank">
+        
+        <label>Description:</label>
+        <textarea id="ideaDesc" rows="2">A food bank to serve low-income families</textarea>
+        
+        <label>Importance:</label>
+        <input type="text" id="ideaImportance" value="Addresses food insecurity in our community">
+        
+        <button onclick="createIdea()">Create Idea</button>
+        <div id="createResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Get Idea by ID</h2>
+        <label>Idea ID:</label>
+        <input type="number" id="getIdeaId" value="1">
+        <button onclick="getIdea()">Get Idea</button>
+        <div id="getResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Save Content</h2>
+        <label>Idea ID:</label>
+        <input type="number" id="contentIdeaId" value="1">
+        
+        <label>Section:</label>
+        <select id="contentSection">
+            <option value="marketing">Marketing</option>
+            <option value="team">Team</option>
+            <option value="funding">Funding</option>
+            <option value="research">Research</option>
+        </select>
+        
+        <label>Content Type:</label>
+        <input type="text" id="contentType" value="email">
+        
+        <label>Content:</label>
+        <textarea id="contentText" rows="3">Join us in fighting food insecurity! Our Community Food Bank is launching soon.</textarea>
+        
+        <button onclick="saveContent()">Save Content</button>
+        <div id="contentResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Get Content by Section</h2>
+        <label>Idea ID:</label>
+        <input type="number" id="getContentIdeaId" value="1">
+        
+        <label>Section:</label>
+        <select id="getContentSection">
+            <option value="marketing">Marketing</option>
+            <option value="team">Team</option>
+            <option value="funding">Funding</option>
+            <option value="research">Research</option>
+        </select>
+        
+        <button onclick="getContent()">Get Content</button>
+        <div id="getContentResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Add Volunteer</h2>
+        <label>Idea ID:</label>
+        <input type="number" id="volIdeaId" value="1">
+        
+        <label>Name:</label>
+        <input type="text" id="volName" value="Jane Smith">
+        
+        <label>Email:</label>
+        <input type="email" id="volEmail" value="jane@example.com">
+        
+        <label>Task:</label>
+        <input type="text" id="volTask" value="Food sorting and distribution">
+        
+        <button onclick="addVolunteer()">Add Volunteer</button>
+        <div id="volResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>6. Get Volunteers</h2>
+        <label>Idea ID:</label>
+        <input type="number" id="getVolIdeaId" value="1">
+        
+        <button onclick="getVolunteers()">Get Volunteers</button>
+        <div id="getVolResult" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        function showResult(elementId, data, isError = false) {
+            const el = document.getElementById(elementId);
+            el.textContent = JSON.stringify(data, null, 2);
+            el.style.display = 'block';
+            el.className = isError ? 'result error' : 'result success';
+        }
+
+        async function createIdea() {
+            try {
+                const response = await fetch('/api/test/ideas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: document.getElementById('ideaTitle').value,
+                        description: document.getElementById('ideaDesc').value,
+                        importance: document.getElementById('ideaImportance').value,
+                        beneficiaries: 'Low-income families and seniors',
+                        implementation: 'Partner with local grocery stores',
+                        significance: 'Will serve 500+ families monthly',
+                        uniqueness: 'Focus on fresh produce',
+                        status: 'draft'
+                    })
+                });
+                const data = await response.json();
+                showResult('createResult', data, !response.ok);
+            } catch (error) {
+                showResult('createResult', { error: error.message }, true);
+            }
+        }
+
+        async function getIdea() {
+            try {
+                const id = document.getElementById('getIdeaId').value;
+                const response = await fetch(`/api/test/ideas/${id}`);
+                const data = await response.json();
+                showResult('getResult', data, !response.ok);
+            } catch (error) {
+                showResult('getResult', { error: error.message }, true);
+            }
+        }
+
+        async function saveContent() {
+            try {
+                const id = document.getElementById('contentIdeaId').value;
+                const response = await fetch(`/api/test/ideas/${id}/content`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        section: document.getElementById('contentSection').value,
+                        content_type: document.getElementById('contentType').value,
+                        content: document.getElementById('contentText').value
+                    })
+                });
+                const data = await response.json();
+                showResult('contentResult', data, !response.ok);
+            } catch (error) {
+                showResult('contentResult', { error: error.message }, true);
+            }
+        }
+
+        async function getContent() {
+            try {
+                const id = document.getElementById('getContentIdeaId').value;
+                const section = document.getElementById('getContentSection').value;
+                const response = await fetch(`/api/test/ideas/${id}/content/${section}`);
+                const data = await response.json();
+                showResult('getContentResult', data, !response.ok);
+            } catch (error) {
+                showResult('getContentResult', { error: error.message }, true);
+            }
+        }
+
+        async function addVolunteer() {
+            try {
+                const id = document.getElementById('volIdeaId').value;
+                const response = await fetch(`/api/test/ideas/${id}/volunteers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: document.getElementById('volName').value,
+                        email: document.getElementById('volEmail').value,
+                        phone: '555-1234',
+                        address: '123 Main St',
+                        task: document.getElementById('volTask').value
+                    })
+                });
+                const data = await response.json();
+                showResult('volResult', data, !response.ok);
+            } catch (error) {
+                showResult('volResult', { error: error.message }, true);
+            }
+        }
+
+        async function getVolunteers() {
+            try {
+                const id = document.getElementById('getVolIdeaId').value;
+                const response = await fetch(`/api/test/ideas/${id}/volunteers`);
+                const data = await response.json();
+                showResult('getVolResult', data, !response.ok);
+            } catch (error) {
+                showResult('getVolResult', { error: error.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>

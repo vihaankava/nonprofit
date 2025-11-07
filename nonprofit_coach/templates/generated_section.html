@@ -1,0 +1,422 @@
+{% extends "generated_base.html" %}
+
+{% block extra_styles %}
+<style>
+    /* Section-specific styles */
+    .section-header {
+        margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 12px;
+    }
+
+    .section-header p {
+        color: #6e6e73;
+        font-size: 1.1rem;
+    }
+
+    /* Button Menu */
+    .button-menu {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .menu-btn {
+        padding: 12px 24px;
+        background: #f5f5f7;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #1d1d1f;
+    }
+
+    .menu-btn:hover {
+        background: #e8e8ed;
+        border-color: {{ theme_color }};
+    }
+
+    .menu-btn.active {
+        background: {{ theme_color }};
+        color: white;
+        border-color: {{ theme_color }};
+    }
+
+    /* Content Display */
+    .content-display {
+        background: #f5f5f7;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+        min-height: 200px;
+        display: none;
+    }
+
+    .content-display.show {
+        display: block;
+    }
+
+    .content-display h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 20px;
+    }
+
+    .content-display .generated-content {
+        color: #333;
+        line-height: 1.8;
+        white-space: pre-wrap;
+    }
+
+    .content-display .loading {
+        text-align: center;
+        padding: 40px;
+        color: #6e6e73;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 16px;
+        border: 4px solid #f5f5f7;
+        border-top-color: {{ theme_color }};
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Chat Interface */
+    .chat-container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .chat-header {
+        margin-bottom: 20px;
+    }
+
+    .chat-header h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 8px;
+    }
+
+    .chat-header p {
+        color: #6e6e73;
+        font-size: 0.95rem;
+    }
+
+    .chat-messages {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        padding: 20px;
+        background: #f5f5f7;
+        border-radius: 8px;
+    }
+
+    .chat-message {
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+
+    .chat-message.user {
+        background: {{ theme_color }};
+        color: white;
+        margin-left: auto;
+    }
+
+    .chat-message.assistant {
+        background: white;
+        color: #333;
+        margin-right: auto;
+    }
+
+    .chat-message .message-role {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        opacity: 0.8;
+    }
+
+    .chat-message .message-content {
+        line-height: 1.6;
+    }
+
+    .chat-input-area {
+        display: flex;
+        gap: 12px;
+    }
+
+    .chat-input-area input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #d2d2d7;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+    }
+
+    .chat-input-area input:focus {
+        outline: none;
+        border-color: {{ theme_color }};
+    }
+
+    .chat-input-area button {
+        padding: 12px 24px;
+        background: {{ theme_color }};
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+    }
+
+    .chat-input-area button:hover {
+        opacity: 0.9;
+    }
+
+    .chat-input-area button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .empty-chat {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6e6e73;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .button-menu {
+            flex-direction: column;
+        }
+
+        .menu-btn {
+            width: 100%;
+        }
+
+        .chat-message {
+            max-width: 90%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-area">
+    <div class="section-header">
+        <h2>{{ section_title }}</h2>
+        <p>{{ section_description }}</p>
+    </div>
+
+    <div class="button-menu">
+        {% for button in section_buttons %}
+        <button class="menu-btn" data-content-type="{{ button.type }}">{{ button.label }}</button>
+        {% endfor %}
+    </div>
+
+    <div id="content-display" class="content-display">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Generating content...</p>
+        </div>
+    </div>
+</div>
+
+<div class="content-area">
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>💬 AI Assistant</h3>
+            <p>Ask questions or request refinements to the generated content</p>
+        </div>
+
+        <div id="chat-messages" class="chat-messages">
+            <div class="empty-chat">
+                <p>👋 Hi! I'm here to help with your {{ section_name }} needs. Click a button above to generate content, or ask me anything!</p>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input 
+                type="text" 
+                id="chat-input" 
+                placeholder="Type your message..."
+                autocomplete="off"
+            />
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ideaId = {{ idea.id }};
+    const section = '{{ section_name }}';
+    const themeColor = '{{ theme_color }}';
+    let chatHistory = [];
+
+    // Button menu handlers
+    document.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            // Update active state
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const contentType = this.dataset.contentType;
+            await generateContent(contentType);
+        });
+    });
+
+    // Generate content
+    async function generateContent(contentType) {
+        const display = document.getElementById('content-display');
+        display.classList.add('show');
+        display.innerHTML = `
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Generating content...</p>
+            </div>
+        `;
+
+        try {
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idea_id: ideaId,
+                    section: section,
+                    content_type: contentType,
+                    chat_context: chatHistory
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                display.innerHTML = `
+                    <h3>${contentType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                    <div class="generated-content">${data.content}</div>
+                `;
+            } else {
+                display.innerHTML = `
+                    <div style="color: #d32f2f; text-align: center;">
+                        <p>❌ ${data.error || 'Failed to generate content'}</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            display.innerHTML = `
+                <div style="color: #d32f2f; text-align: center;">
+                    <p>❌ Error: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Chat functionality
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Clear input
+        chatInput.value = '';
+        sendBtn.disabled = true;
+
+        // Clear empty state if present
+        const emptyChat = chatMessages.querySelector('.empty-chat');
+        if (emptyChat) {
+            emptyChat.remove();
+        }
+
+        // Add user message
+        addMessage('user', message);
+        chatHistory.push({ role: 'user', content: message });
+
+        // Show loading
+        const loadingId = 'loading-' + Date.now();
+        chatMessages.innerHTML += `
+            <div id="${loadingId}" class="chat-message assistant">
+                <div class="message-content">Thinking...</div>
+            </div>
+        `;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idea_id: ideaId,
+                    section: section,
+                    message: message,
+                    chat_history: chatHistory
+                })
+            });
+
+            const data = await response.json();
+
+            // Remove loading
+            document.getElementById(loadingId).remove();
+
+            if (data.success) {
+                addMessage('assistant', data.response);
+                chatHistory.push({ role: 'assistant', content: data.response });
+            } else {
+                addMessage('assistant', '❌ ' + (data.error || 'Failed to get response'));
+            }
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            addMessage('assistant', '❌ Error: ' + error.message);
+        }
+
+        sendBtn.disabled = false;
+        chatInput.focus();
+    }
+
+    function addMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${role}`;
+        messageDiv.innerHTML = `
+            <div class="message-role">${role === 'user' ? 'You' : 'AI Assistant'}</div>
+            <div class="message-content">${content}</div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+</script>
+{% endblock %}
