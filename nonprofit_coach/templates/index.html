@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Startup Coach</title>
+    <title>Social Startup Mentor</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Social Startup Coach</h1>
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Social Startup Mentor Logo" class="logo">
+            <h1>Social Startup Mentor</h1>
             <p class="subtitle">Transform your social cause ideas into actionable nonprofit startups</p>
         </header>
 
