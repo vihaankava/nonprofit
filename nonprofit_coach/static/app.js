@@ -345,3 +345,104 @@ async function deleteIdea(ideaId) {
         alert('Network error. Please try again.');
     }
 }
+
+
+// Voice input functionality
+let recognition = null;
+let currentVoiceTarget = null;
+
+// Check if browser supports speech recognition
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript + ' ';
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        if (currentVoiceTarget) {
+            const input = document.getElementById(currentVoiceTarget);
+            if (input) {
+                // Append to existing text
+                const currentText = input.value;
+                if (finalTranscript) {
+                    input.value = currentText + finalTranscript;
+                }
+            }
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        stopVoiceInput();
+    };
+
+    recognition.onend = () => {
+        stopVoiceInput();
+    };
+}
+
+// Add click handlers to all voice buttons
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.voice-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.dataset.target;
+            toggleVoiceInput(targetId, this);
+        });
+    });
+});
+
+function toggleVoiceInput(targetId, button) {
+    if (!recognition) {
+        alert('Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
+        return;
+    }
+
+    if (currentVoiceTarget === targetId) {
+        // Stop listening
+        stopVoiceInput();
+    } else {
+        // Start listening
+        stopVoiceInput(); // Stop any existing recognition
+        currentVoiceTarget = targetId;
+        
+        try {
+            recognition.start();
+            button.classList.add('listening');
+            button.textContent = '⏹️';
+        } catch (error) {
+            console.error('Error starting recognition:', error);
+        }
+    }
+}
+
+function stopVoiceInput() {
+    if (recognition && currentVoiceTarget) {
+        try {
+            recognition.stop();
+        } catch (error) {
+            // Already stopped
+        }
+        
+        // Reset button state
+        const button = document.querySelector(`[data-target="${currentVoiceTarget}"]`);
+        if (button) {
+            button.classList.remove('listening');
+            button.textContent = '🎤';
+        }
+        
+        currentVoiceTarget = null;
+    }
+}
