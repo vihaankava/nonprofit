@@ -43,6 +43,7 @@ Then:
 
 - **Windows:** See [SETUP_WINDOWS.md](SETUP_WINDOWS.md)
 - **Linux:** See [SETUP_LINUX.md](SETUP_LINUX.md)
+- **Chromebook:** See [SETUP_CHROMEBOOK.md](SETUP_CHROMEBOOK.md)
 - **macOS:** Follow instructions below
 
 ---
