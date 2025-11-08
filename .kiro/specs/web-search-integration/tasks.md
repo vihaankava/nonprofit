@@ -78,33 +78,33 @@
   - Request citation formatting with source references
   - _Requirements: 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 4. Create content formatter module
+- [x] 4. Create content formatter module
   - Build content formatting utilities
   - Implement table generation from data
   - Add citation and link formatting
   - _Requirements: 1.3, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 4.1 Create ContentFormatter class
+- [x] 4.1 Create ContentFormatter class
   - Write `content_formatter.py` with ContentFormatter class
   - Implement format_with_tables() static method
   - Implement add_citations() static method
   - Implement ensure_links_clickable() static method
   - _Requirements: 2.2, 2.3, 3.1, 3.2_
 
-- [ ] 4.2 Add specialized table formatters
+- [x] 4.2 Add specialized table formatters
   - Implement format_organization_table() for local organizations
   - Implement format_grant_table() for funding opportunities
   - Implement format_resource_table() for tools and platforms
   - Add responsive CSS classes for mobile display
   - _Requirements: 1.3, 3.1, 3.2, 3.3, 3.4, 3.5, 4.3_
 
-- [ ] 5. Integrate search into Flask routes
+- [x] 5. Integrate search into Flask routes
   - Modify /api/generate endpoint to use search
   - Add search decision logic
   - Implement search result processing
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 4.1, 4.2, 4.3, 5.1, 5.2, 5.3_
 
-- [ ] 5.1 Update /api/generate endpoint
+- [x] 5.1 Update /api/generate endpoint
   - Add search service initialization
   - Implement should_use_search() helper function
   - Add perform_search() helper function
@@ -112,13 +112,13 @@
   - Apply content formatting to final output
   - _Requirements: 1.1, 1.2, 2.1, 4.1, 5.1_
 
-- [ ] 5.2 Implement search decision logic
+- [x] 5.2 Implement search decision logic
   - Define which content types require search (local_orgs, grants, resources, etc.)
   - Create mapping of content types to search methods
   - Add location-based search for research section
   - _Requirements: 1.1, 1.2, 4.1, 4.2, 5.1, 5.2_
 
-- [ ] 5.3 Add search result caching
+- [x] 5.3 Add search result caching
   - Check cache before making API calls
   - Store successful search results in cache
   - Track API usage to prevent rate limit issues

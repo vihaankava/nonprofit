@@ -570,3 +570,245 @@ header p {
     width: auto;
     cursor: pointer;
 }
+
+/* Search-Enhanced Content Tables */
+.table-wrapper {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 0.95rem;
+}
+
+.search-table caption {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1d1d1f;
+    text-align: left;
+    padding: 16px;
+    background: #f5f5f7;
+    border-radius: 8px 8px 0 0;
+}
+
+.search-table thead {
+    background: #f5f5f7;
+}
+
+.search-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #1d1d1f;
+    border-bottom: 2px solid #d2d2d7;
+}
+
+.search-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8e8ed;
+    color: #333;
+}
+
+.search-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.search-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.search-table a {
+    color: #0071e3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.search-table a:hover {
+    text-decoration: underline;
+}
+
+/* Organization Table Specific */
+.organization-table .org-name {
+    font-weight: 600;
+    color: #1d1d1f;
+    min-width: 150px;
+}
+
+.organization-table .org-description {
+    max-width: 300px;
+    line-height: 1.5;
+}
+
+.organization-table .org-location {
+    white-space: nowrap;
+    color: #6e6e73;
+}
+
+.organization-table .org-website {
+    white-space: nowrap;
+}
+
+/* Grant Table Specific */
+.grant-table .grant-name {
+    font-weight: 600;
+    color: #1d1d1f;
+    min-width: 180px;
+}
+
+.grant-table .grant-amount {
+    white-space: nowrap;
+    font-weight: 500;
+    color: #34c759;
+}
+
+.grant-table .grant-deadline {
+    white-space: nowrap;
+    color: #6e6e73;
+}
+
+.grant-table .grant-link {
+    white-space: nowrap;
+}
+
+/* Resource Table Specific */
+.resource-table .resource-title {
+    font-weight: 600;
+    color: #1d1d1f;
+    min-width: 150px;
+}
+
+.resource-table .resource-description {
+    max-width: 300px;
+    line-height: 1.5;
+}
+
+.resource-table .resource-type {
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.resource-table .resource-cost {
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.resource-table .resource-link {
+    white-space: nowrap;
+}
+
+/* Citations Section */
+.citations {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 2px solid #e8e8ed;
+}
+
+.citations h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 16px;
+}
+
+.citation-list {
+    list-style: decimal;
+    padding-left: 24px;
+}
+
+.citation-list li {
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.citation-list a {
+    color: #0071e3;
+    text-decoration: none;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.citation-list a:hover {
+    text-decoration: underline;
+}
+
+.citation-snippet {
+    color: #6e6e73;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    line-height: 1.5;
+}
+
+/* Responsive Table Design */
+@media (max-width: 768px) {
+    .search-table {
+        font-size: 0.85rem;
+    }
+    
+    .search-table th,
+    .search-table td {
+        padding: 8px 12px;
+    }
+    
+    .search-table caption {
+        font-size: 1.1rem;
+        padding: 12px;
+    }
+    
+    /* Stack table cells on mobile for better readability */
+    .organization-table .org-description,
+    .grant-table .grant-name,
+    .resource-table .resource-description {
+        max-width: 200px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Convert tables to card layout on very small screens */
+    .search-table thead {
+        display: none;
+    }
+    
+    .search-table,
+    .search-table tbody,
+    .search-table tr,
+    .search-table td {
+        display: block;
+        width: 100%;
+    }
+    
+    .search-table tr {
+        margin-bottom: 16px;
+        border: 1px solid #e8e8ed;
+        border-radius: 8px;
+        padding: 12px;
+        background: white;
+    }
+    
+    .search-table td {
+        padding: 8px 0;
+        border: none;
+        text-align: left;
+    }
+    
+    .search-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+        color: #1d1d1f;
+    }
+    
+    /* Remove max-width constraints on mobile */
+    .organization-table .org-description,
+    .grant-table .grant-name,
+    .resource-table .resource-description {
+        max-width: none;
+    }
+}

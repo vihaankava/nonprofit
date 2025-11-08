@@ -35,6 +35,122 @@ def get_api_key():
     """Get API key from session or environment variable."""
     return session.get('api_key') or os.environ.get('ANTHROPIC_API_KEY')
 
+
+# ============================================================
+# SEARCH INTEGRATION HELPER FUNCTIONS
+# ============================================================
+
+def should_use_search(section: str, content_type: str) -> bool:
+    """
+    Determine if web search should be used for this content type.
+    
+    Args:
+        section: Section name ('research', 'funding', 'team', 'marketing')
+        content_type: Type of content being generated
+        
+    Returns:
+        True if search should be used, False otherwise
+    """
+    # Define content types that benefit from search
+    search_enabled_types = {
+        'research': ['local_orgs', 'implementation_steps', 'resources'],
+        'funding': ['grant_proposal', 'budget_plan'],
+        'team': ['recruiting_pitch', 'job_description'],
+        'marketing': []  # Generally AI-only, but could add specific types
+    }
+    
+    # Check if this section/content_type combination should use search
+    if section in search_enabled_types:
+        return content_type in search_enabled_types[section]
+    
+    return False
+
+
+def perform_search(search_service, idea: dict, section: str, content_type: str):
+    """
+    Perform appropriate search based on section and content type.
+    
+    Args:
+        search_service: SearchService instance
+        idea: Idea dictionary with nonprofit details
+        section: Section name
+        content_type: Type of content being generated
+        
+    Returns:
+        SearchResults object or None if search fails
+    """
+    try:
+        location = idea.get('location', '')
+        cause = idea.get('title', '')
+        description = idea.get('description', '')
+        
+        # Map content types to search methods
+        if content_type == 'local_orgs':
+            # Search for local organizations
+            return search_service.search(
+                query=f"{cause} nonprofit organizations community resources near {location}",
+                location=location,
+                filters={'count': 10}
+            )
+        
+        elif content_type == 'grant_proposal':
+            # Search for grant opportunities
+            return search_service.search(
+                query=f"{cause} grants funding opportunities nonprofit {location}",
+                location=location,
+                filters={'count': 10}
+            )
+        
+        elif content_type == 'implementation_steps':
+            # Search for tools and platforms
+            return search_service.search(
+                query=f"{cause} nonprofit tools platforms resources implementation",
+                filters={'count': 8}
+            )
+        
+        elif content_type == 'resources':
+            # Search for educational resources and guides
+            return search_service.search(
+                query=f"{cause} nonprofit resources guides how to start",
+                filters={'count': 8}
+            )
+        
+        elif content_type == 'budget_plan':
+            # Search for budget examples and cost information
+            return search_service.search(
+                query=f"{cause} nonprofit budget startup costs expenses",
+                filters={'count': 5}
+            )
+        
+        elif content_type == 'recruiting_pitch':
+            # Search for volunteer platforms
+            return search_service.search(
+                query=f"volunteer recruitment platforms nonprofit {location}",
+                location=location,
+                filters={'count': 5}
+            )
+        
+        elif content_type == 'job_description':
+            # Search for salary benchmarks and role information
+            return search_service.search(
+                query=f"nonprofit job roles salaries {cause}",
+                filters={'count': 5}
+            )
+        
+        else:
+            # Default general search
+            return search_service.search(
+                query=f"{cause} {description} nonprofit {content_type}",
+                filters={'count': 5}
+            )
+    
+    except Exception as e:
+        # Log the error but don't fail - fall back to AI-only generation
+        print(f"Search failed for {section}/{content_type}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 # Landing page route - shows all ideas and new idea form
 @app.route('/')
 def index():
@@ -214,13 +330,35 @@ def generate_content():
         # Create AI service
         ai_service = create_ai_service(api_key)
         
-        # Generate content
-        content = ai_service.generate_section_content(
+        # Initialize search service
+        from search_config import create_search_service
+        search_service = create_search_service()
+        
+        # Determine if search is needed and perform search
+        search_results = None
+        if search_service and should_use_search(section, content_type):
+            search_results = perform_search(
+                search_service,
+                idea,
+                section,
+                content_type
+            )
+        
+        # Generate content with search results
+        content = ai_service.generate_section_content_with_search(
             idea_summary=idea,
             section=section,
             content_type=content_type,
+            search_results=search_results,
             chat_context=chat_context
         )
+        
+        # Apply content formatting if we have search results
+        if search_results:
+            from content_formatter import ContentFormatter
+            content = ContentFormatter.ensure_links_clickable(content)
+            # Add citations if search results were used
+            content = ContentFormatter.add_citations(content, [search_results])
         
         # Save content to database
         save_content(idea_id, section, content_type, content)

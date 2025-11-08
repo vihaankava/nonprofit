@@ -1,0 +1,286 @@
+================================================================================
+NONPROFIT IDEA COACH - INSTALLER PACKAGE CONTENTS
+================================================================================
+
+📁 PROJECT STRUCTURE
+================================================================================
+
+nonprofit_coach/                    # Main application directory
+├── app.py                         # Flask web server
+├── ai_service.py                  # AI integration (Anthropic Claude)
+├── db.py                          # SQLite database operations
+├── search_service.py              # Web search integration
+├── search_cache.py                # Search result caching
+├── search_config.py               # Search configuration
+├── content_formatter.py           # HTML formatting utilities
+├── site_generator.py              # Static site generation
+├── requirements.txt               # Python dependencies
+├── .env.example                   # Configuration template
+├── README.md                      # Application documentation
+├── templates/                     # HTML templates
+│   ├── index.html
+│   ├── questionnaire.html
+│   ├── generated_home.html
+│   └── generated_section.html
+├── static/                        # CSS, JS, images
+│   ├── style.css
+│   ├── app.js
+│   └── logo.svg
+└── search_providers/              # Search provider implementations
+    ├── base.py
+    └── brave.py
+
+installer/                          # Installer build scripts
+├── build_windows.bat              # Windows standalone builder
+├── build_mac.sh                   # macOS standalone builder
+├── install_windows_simple.bat     # Windows simple installer
+├── install_mac_simple.sh          # macOS simple installer
+├── setup.py                       # Python setup configuration
+├── README.md                      # Build instructions
+├── INSTALLER_SUMMARY.md           # Complete overview
+├── USER_QUICK_START.md            # End user guide
+└── PACKAGE_CONTENTS.txt           # This file
+
+build_spec.py                       # PyInstaller configuration
+DISTRIBUTION_GUIDE.md               # Distribution strategy guide
+
+================================================================================
+📦 INSTALLER OUTPUTS
+================================================================================
+
+METHOD 1: STANDALONE EXECUTABLE
+--------------------------------
+Windows: NonprofitIdeaCoach-Windows-v1.0.0.zip (~150 MB)
+  ├── NonprofitIdeaCoach.exe       # Standalone executable
+  ├── start.bat                    # Easy launcher
+  ├── .env.example                 # Configuration template
+  ├── README.md                    # Documentation
+  └── INSTALL.txt                  # Installation instructions
+
+macOS: NonprofitIdeaCoach-macOS-v1.0.0.dmg (~150 MB)
+  ├── NonprofitIdeaCoach           # Standalone executable
+  ├── start.command                # Easy launcher
+  ├── .env.example                 # Configuration template
+  ├── README.md                    # Documentation
+  └── INSTALL.txt                  # Installation instructions
+
+METHOD 2: SIMPLE INSTALLER
+---------------------------
+Windows: Distribution folder
+  ├── install_windows_simple.bat   # Installer script
+  └── nonprofit_coach/             # Application source
+
+macOS: Distribution folder
+  ├── install_mac_simple.sh        # Installer script
+  └── nonprofit_coach/             # Application source
+
+================================================================================
+🔧 BUILD DEPENDENCIES
+================================================================================
+
+Required for Building:
+  - Python 3.8 or higher
+  - pip (Python package manager)
+  - PyInstaller (for standalone builds)
+
+Included in Installers:
+  - Python runtime (embedded)
+  - Flask 3.0.0
+  - Anthropic SDK 0.40.0+
+  - python-dotenv 1.0.0
+  - gunicorn 21.2.0
+  - SQLite (built into Python)
+
+================================================================================
+💻 SYSTEM REQUIREMENTS
+================================================================================
+
+Windows:
+  - Windows 10 (64-bit) or later
+  - 4 GB RAM (minimum 2 GB)
+  - 500 MB free disk space
+  - Internet connection
+  - Modern web browser
+
+macOS:
+  - macOS 10.13 (High Sierra) or later
+  - 4 GB RAM (minimum 2 GB)
+  - 500 MB free disk space
+  - Internet connection
+  - Modern web browser
+
+================================================================================
+🔑 CONFIGURATION
+================================================================================
+
+Required:
+  ANTHROPIC_API_KEY              # Get from console.anthropic.com
+
+Optional (for enhanced search):
+  BRAVE_API_KEY                  # Get from brave.com/search/api/
+  SEARCH_PROVIDER=brave
+  SEARCH_ENABLED=true
+
+Advanced:
+  SECRET_KEY                     # Flask session secret
+  SEARCH_CACHE_TTL=86400        # Cache duration (seconds)
+  SEARCH_CACHE_MAX_SIZE=1000    # Max cache entries
+  SEARCH_TIMEOUT=5              # Search timeout (seconds)
+  SEARCH_MAX_RESULTS=10         # Results per search
+
+================================================================================
+📋 FEATURES INCLUDED
+================================================================================
+
+✅ AI-Powered Content Generation
+  - Nonprofit idea development
+  - Marketing materials (emails, flyers, social posts)
+  - Team recruitment materials
+  - Grant proposals and funding plans
+  - Implementation guides
+
+✅ Web Search Integration (Optional)
+  - Local organization discovery
+  - Grant opportunity search
+  - Resource and tool recommendations
+  - Cached results for performance
+
+✅ Interactive Chat
+  - Context-aware AI assistant
+  - Section-specific guidance
+  - Iterative content refinement
+
+✅ Data Management
+  - SQLite database storage
+  - Multiple idea tracking
+  - Content versioning
+  - Volunteer management
+
+✅ Static Site Generation
+  - Professional HTML output
+  - Responsive design
+  - Printable formats
+
+================================================================================
+🚀 USAGE WORKFLOW
+================================================================================
+
+1. INSTALLATION
+   └─> Extract/Install → Launch → Configure API Key
+
+2. IDEA DEVELOPMENT
+   └─> Answer Questions → AI Follow-ups → Complete Profile
+
+3. CONTENT GENERATION
+   └─> Choose Section → Select Content Type → Generate → Refine
+
+4. SECTIONS AVAILABLE
+   ├─> Research: Local orgs, resources, implementation
+   ├─> Team: Job descriptions, recruitment materials
+   ├─> Funding: Grant proposals, budget plans
+   └─> Marketing: Emails, flyers, social media
+
+5. EXPORT & USE
+   └─> Copy Content → Download → Share → Implement
+
+================================================================================
+📊 COMPARISON: STANDALONE vs SIMPLE
+================================================================================
+
+                    STANDALONE          SIMPLE
+File Size           ~150 MB             ~5 MB
+Python Required     No                  Yes (auto-installs)
+Build Time          5-10 minutes        Instant
+Install Time        1-2 minutes         5-7 minutes
+User Complexity     Very Easy           Moderate
+Update Process      Full rebuild        Replace files
+Best For            End users           Developers
+
+================================================================================
+🔒 SECURITY NOTES
+================================================================================
+
+Data Storage:
+  - All data stored locally (nonprofit.db)
+  - No cloud storage by default
+  - API calls to Anthropic servers only
+
+Privacy:
+  - No telemetry or tracking
+  - API keys stored locally
+  - User data never shared
+
+Recommendations:
+  - Keep API keys secure
+  - Regular backups of nonprofit.db
+  - Use HTTPS for production deployments
+  - Consider code signing for distribution
+
+================================================================================
+📞 SUPPORT RESOURCES
+================================================================================
+
+Documentation:
+  - installer/README.md              # Build instructions
+  - installer/INSTALLER_SUMMARY.md   # Complete overview
+  - installer/USER_QUICK_START.md    # User guide
+  - DISTRIBUTION_GUIDE.md            # Distribution strategy
+  - nonprofit_coach/README.md        # Application docs
+
+External Resources:
+  - Anthropic API: https://docs.anthropic.com
+  - Brave Search: https://brave.com/search/api/
+  - PyInstaller: https://pyinstaller.org
+  - Flask: https://flask.palletsprojects.com
+
+================================================================================
+✅ TESTING CHECKLIST
+================================================================================
+
+Before Distribution:
+  [ ] Build completes without errors
+  [ ] Test on clean Windows machine
+  [ ] Test on clean macOS machine
+  [ ] Verify all features work
+  [ ] Test API key configuration
+  [ ] Test content generation
+  [ ] Test database operations
+  [ ] Test search features (if enabled)
+  [ ] Verify data persistence
+  [ ] Test uninstall/cleanup
+
+================================================================================
+📝 VERSION INFORMATION
+================================================================================
+
+Application Version: 1.0.0
+Installer Version: 1.0.0
+Python Version: 3.8+
+Flask Version: 3.0.0
+Anthropic SDK: 0.40.0+
+
+Build Date: 2024
+Last Updated: 2024
+
+================================================================================
+🎯 QUICK REFERENCE
+================================================================================
+
+BUILD COMMANDS:
+  Windows Standalone:  cd installer && build_windows.bat
+  macOS Standalone:    cd installer && ./build_mac.sh
+  Simple Package:      Copy installer script + nonprofit_coach/
+
+TEST COMMANDS:
+  Syntax Check:        python -m py_compile nonprofit_coach/*.py
+  Install Deps:        pip install -r nonprofit_coach/requirements.txt
+  Run App:             cd nonprofit_coach && python app.py
+
+DISTRIBUTION:
+  Upload to:           File sharing service (Dropbox, Drive, etc.)
+  Share:               Download link + USER_QUICK_START.md
+  Support:             Set up email/forum for questions
+
+================================================================================
+END OF PACKAGE CONTENTS
+================================================================================
