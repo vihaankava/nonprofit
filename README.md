@@ -30,18 +30,36 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
    cd Coaching-for-non-Profits
    ```
 
-2. **Install Python dependencies:**
+2. **Navigate to the nonprofit_coach directory:**
    ```bash
    cd nonprofit_coach
-   pip3 install -r requirements.txt
+   ```
+
+3. **Create and activate a virtual environment:**
+   
+   **On macOS/Linux:**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+   
+   **On Windows:**
+   ```cmd
+   python -m venv venv
+   venv\Scripts\activate
+   ```
+
+4. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
    ```
    
    Or install individually:
    ```bash
-   pip3 install flask anthropic python-dotenv requests
+   pip install flask anthropic python-dotenv requests
    ```
 
-3. **Set up your API keys:**
+5. **Set up your API keys:**
    
    Open the `.env` file and add your API keys:
    ```
@@ -59,12 +77,14 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
    - Sign up for an account
    - Get your API key from the dashboard
 
-4. **Run the application:**
+6. **Run the application:**
    ```bash
-   python3 app.py
+   python app.py
    ```
+   
+   Note: Make sure your virtual environment is activated (you should see `(venv)` in your terminal prompt)
 
-5. **Open your browser:**
+7. **Open your browser:**
    
    Go to: `http://127.0.0.1:5001`
 
@@ -214,6 +234,17 @@ SEARCH_RETRY_ATTEMPTS=1
 The app will work without search enabled, but won't include real-time web data in generated content.
 
 ## Troubleshooting
+
+### "Externally Managed Environment" Error
+
+If you see this error when trying to install packages:
+```
+error: externally-managed-environment
+```
+
+**Solution:** Use a virtual environment (see step 3 in Setup Instructions above).
+
+This error occurs on newer Python installations (especially on macOS) that prevent installing packages globally. Virtual environments are the recommended way to manage Python dependencies.
 
 ### Port 5000 Already in Use
 
