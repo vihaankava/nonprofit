@@ -17,8 +17,12 @@ from site_generator import (
     generate_section_page,
     generate_and_save_site
 )
+from search_config import validate_search_config_on_startup
 
 load_dotenv()
+
+# Validate search configuration on startup
+validate_search_config_on_startup()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')

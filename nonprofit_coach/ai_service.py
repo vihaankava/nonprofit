@@ -17,7 +17,11 @@ class AIService:
         Args:
             api_key: Anthropic API key for Claude
         """
-        self.client = anthropic.Anthropic(api_key=api_key)
+        # Initialize client with minimal configuration to avoid compatibility issues
+        self.client = anthropic.Anthropic(
+            api_key=api_key,
+            max_retries=2
+        )
         self.model = "claude-3-haiku-20240307"
         self.max_tokens = 2048
     
