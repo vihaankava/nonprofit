@@ -129,7 +129,12 @@ class SearchService:
             return search_results
             
         except Exception as e:
-            print(f"Search failed: {e}")
+            # Log the error with details
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Search failed for query '{query}': {type(e).__name__}: {e}")
+            
+            # Return None to trigger fallback to AI-only generation
             return None
     
     def search_local_organizations(self, cause: str, location: str, 

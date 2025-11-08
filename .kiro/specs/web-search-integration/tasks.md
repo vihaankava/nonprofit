@@ -26,53 +26,53 @@
   - Create configuration validation on app startup
   - _Requirements: 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 2. Implement Brave Search provider
+- [x] 2. Implement Brave Search provider
   - Create Brave Search API integration
   - Implement result parsing and formatting
   - Add error handling and fallback logic
   - _Requirements: 1.1, 1.2, 2.1, 2.2, 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 2.1 Create Brave Search provider class
+- [x] 2.1 Create Brave Search provider class
   - Write `search_providers/brave.py` with BraveSearchProvider class
   - Implement search() method with API request logic
   - Implement parse_results() method to convert API response to SearchResults
   - Add is_available() method to check API key configuration
   - _Requirements: 8.1_
 
-- [ ] 2.2 Implement specialized search methods
+- [x] 2.2 Implement specialized search methods
   - Add search_local_organizations() method with location filtering
   - Add search_grants() method with funding-specific queries
   - Add search_resources() method for tools and platforms
   - Implement query construction for each search type
   - _Requirements: 1.1, 1.2, 4.1, 4.2, 5.1, 5.2_
 
-- [ ] 2.3 Add error handling and fallback
+- [x] 2.3 Add error handling and fallback
   - Implement retry logic with exponential backoff
   - Add timeout handling (5 second limit)
   - Implement graceful degradation when search fails
   - Log all search errors with details
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 3. Enhance AI service for search integration
+- [x] 3. Enhance AI service for search integration
   - Modify AI service to accept search results
   - Update prompts to include search context
   - Add formatting instructions for tables and links
   - _Requirements: 1.3, 2.3, 2.4, 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 3.1 Add search-aware content generation method
+- [x] 3.1 Add search-aware content generation method
   - Create generate_section_content_with_search() method in AIService
   - Accept optional search_results parameter
   - Fall back to standard generation if search_results is None
   - _Requirements: 7.1, 7.4_
 
-- [ ] 3.2 Enhance system prompts with search context
+- [x] 3.2 Enhance system prompts with search context
   - Create _get_enhanced_system_prompt() method
   - Format search results for inclusion in prompts
   - Add formatting requirements (tables, links, citations)
   - Instruct AI to use search results as primary source
   - _Requirements: 1.3, 2.3, 3.1, 3.2, 3.3_
 
-- [ ] 3.3 Update content prompts for structured output
+- [x] 3.3 Update content prompts for structured output
   - Modify _get_content_prompt() to request HTML tables
   - Add instructions for clickable links with anchor tags
   - Request citation formatting with source references
