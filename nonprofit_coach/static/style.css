@@ -29,8 +29,8 @@ header {
 }
 
 header .logo {
-    width: 120px;
-    height: 120px;
+    width: 300px;
+    height: 300px;
     margin-bottom: 20px;
     animation: fadeIn 0.6s ease-in;
 }
