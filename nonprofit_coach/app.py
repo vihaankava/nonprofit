@@ -107,7 +107,7 @@ def complete_questionnaire():
         
         # Validate required fields
         required_fields = ['title', 'description', 'importance', 'beneficiaries', 
-                          'implementation', 'significance', 'uniqueness']
+                          'implementation', 'significance', 'uniqueness', 'location']
         
         for field in required_fields:
             if not data.get(field):
@@ -122,6 +122,7 @@ def complete_questionnaire():
             'implementation': data.get('implementation'),
             'significance': data.get('significance'),
             'uniqueness': data.get('uniqueness'),
+            'location': data.get('location'),
             'status': 'complete'
         }
         

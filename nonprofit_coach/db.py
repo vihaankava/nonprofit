@@ -29,6 +29,7 @@ def init_db():
             implementation TEXT,
             significance TEXT,
             uniqueness TEXT,
+            location TEXT,
             api_key TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             status TEXT DEFAULT 'draft'
@@ -86,7 +87,7 @@ def save_idea(idea_data: Dict[str, Any]) -> int:
             UPDATE ideas 
             SET title = ?, description = ?, importance = ?, 
                 beneficiaries = ?, implementation = ?, significance = ?, 
-                uniqueness = ?, api_key = ?, status = ?
+                uniqueness = ?, location = ?, api_key = ?, status = ?
             WHERE id = ?
         ''', (
             idea_data.get('title', ''),
@@ -96,6 +97,7 @@ def save_idea(idea_data: Dict[str, Any]) -> int:
             idea_data.get('implementation', ''),
             idea_data.get('significance', ''),
             idea_data.get('uniqueness', ''),
+            idea_data.get('location', ''),
             idea_data.get('api_key'),
             idea_data.get('status', 'draft'),
             idea_data['id']
@@ -105,8 +107,8 @@ def save_idea(idea_data: Dict[str, Any]) -> int:
         # Insert new idea
         cursor.execute('''
             INSERT INTO ideas (title, description, importance, beneficiaries, 
-                             implementation, significance, uniqueness, api_key, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                             implementation, significance, uniqueness, location, api_key, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             idea_data.get('title', ''),
             idea_data.get('description', ''),
@@ -115,6 +117,7 @@ def save_idea(idea_data: Dict[str, Any]) -> int:
             idea_data.get('implementation', ''),
             idea_data.get('significance', ''),
             idea_data.get('uniqueness', ''),
+            idea_data.get('location', ''),
             idea_data.get('api_key'),
             idea_data.get('status', 'draft')
         ))

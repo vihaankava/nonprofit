@@ -188,6 +188,7 @@ NONPROFIT IDEA DETAILS:
 - Implementation approach: {idea_summary.get('implementation', 'N/A')}
 - Significance: {idea_summary.get('significance', 'N/A')}
 - What makes it unique: {idea_summary.get('uniqueness', 'N/A')}
+- Operating location: {idea_summary.get('location', 'N/A')}
 
 CURRENT SECTION: {section.upper()}
 """
@@ -264,7 +265,7 @@ Guidelines:
             
             # Research section
             'implementation_steps': "Create a detailed, step-by-step implementation plan for this nonprofit. Include 10-15 specific, actionable steps in chronological order. Be practical and realistic.",
-            'local_orgs': "Identify types of local organizations that could help or partner with this nonprofit. Suggest where to find them and how they might collaborate.",
+            'local_orgs': "Identify specific local organizations, community groups, and resources in the operating location that could help or partner with this nonprofit. Include names of actual organizations if possible, types of organizations to look for, and how they might collaborate. Focus specifically on the geographic area mentioned in the nonprofit's location.",
             'resources': "Provide a list of helpful resources for starting this nonprofit. Include websites, tools, organizations, and guides that would be valuable."
         }
         

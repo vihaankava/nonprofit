@@ -76,7 +76,7 @@ function showSuccessMessage(ideaId) {
 
 // Questionnaire state
 let currentQuestion = 1;
-const totalQuestions = 7;
+const totalQuestions = 8;
 
 // Setup API Key
 async function setupApiKey() {
