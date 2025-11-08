@@ -33,7 +33,12 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
 2. **Install Python dependencies:**
    ```bash
    cd nonprofit_coach
-   pip3 install flask anthropic python-dotenv
+   pip3 install -r requirements.txt
+   ```
+   
+   Or install individually:
+   ```bash
+   pip3 install flask anthropic python-dotenv requests
    ```
 
 3. **Set up your API keys:**

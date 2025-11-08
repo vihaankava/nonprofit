@@ -6,24 +6,29 @@ A web application that helps individuals transform their cause-based ideas into 
 
 1. Install Python 3.8 or higher
 
-2. Install dependencies:
+2. Navigate to the nonprofit_coach directory:
+```bash
+cd nonprofit_coach
+```
+
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file (optional):
+4. Create a `.env` file (optional):
 ```bash
 cp .env.example .env
 ```
 
-4. Run the application:
+5. Run the application:
 ```bash
 python app.py
 ```
 
-5. Open your browser to `http://localhost:5000`
+6. Open your browser to `http://localhost:5001`
 
-6. Enter your Claude API key to get started
+7. Enter your Claude API key to get started
 
 ## Features
 
