@@ -45,6 +45,7 @@ Then:
 - **Linux:** See [SETUP_LINUX.md](SETUP_LINUX.md)
 - **Chromebook:** See [SETUP_CHROMEBOOK.md](SETUP_CHROMEBOOK.md)
 - **macOS:** Follow instructions below
+- **AWS Deployment:** See [aws/DEPLOYMENT_GUIDE.md](aws/DEPLOYMENT_GUIDE.md)
 
 ---
 
