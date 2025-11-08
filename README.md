@@ -6,12 +6,14 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
 
 - 🤖 AI-guided questionnaire to develop your nonprofit idea
 - 🎨 Automatically generated personalized website for each nonprofit
+- 🔍 **Web search integration** for real-time research (grants, organizations, resources)
 - 📚 Research & Planning tools (implementation steps, local orgs, resources)
 - 👥 Team Building tools (recruiting pitch, job descriptions, volunteer forms)
 - 💰 Funding Strategy tools (grant proposals, donor letters, budget plans)
 - 📢 Marketing Materials (emails, flyers, social media posts)
 - 💬 AI chat assistant for each section
 - 🗑️ Easy idea management with delete functionality
+- ⚡ Smart caching for improved performance
 
 ## Setup Instructions
 
@@ -34,13 +36,23 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
    pip3 install flask anthropic python-dotenv
    ```
 
-3. **Set up your API key:**
+3. **Set up your API keys:**
    
-   Open the `.env` file and add your Anthropic API key:
+   Open the `.env` file and add your API keys:
    ```
    ANTHROPIC_API_KEY=your-api-key-here
    SECRET_KEY=your-secret-key-change-in-production
+   
+   # Optional: Enable web search (recommended)
+   SEARCH_ENABLED=true
+   SEARCH_PROVIDER=brave
+   BRAVE_API_KEY=your-brave-api-key-here
    ```
+   
+   To get a Brave Search API key (free tier available):
+   - Visit [Brave Search API](https://brave.com/search/api/)
+   - Sign up for an account
+   - Get your API key from the dashboard
 
 4. **Run the application:**
    ```bash
@@ -89,6 +101,12 @@ nonprofit_coach/
 ├── db.py                  # Database functions
 ├── ai_service.py          # AI/Claude integration
 ├── site_generator.py      # Website generation logic
+├── search_service.py      # Web search orchestration
+├── search_cache.py        # Search result caching
+├── search_config.py       # Search configuration & validation
+├── search_providers/      # Search provider implementations
+│   ├── base.py           # Abstract provider interface
+│   └── brave.py          # Brave Search provider (coming soon)
 ├── templates/             # HTML templates
 │   ├── index.html
 │   ├── generated_home.html
@@ -125,7 +143,9 @@ The application uses SQLite with three tables:
 - **Backend**: Python, Flask
 - **Database**: SQLite
 - **AI**: Anthropic Claude (Haiku model)
+- **Search**: Brave Search API (optional)
 - **Frontend**: HTML, CSS, JavaScript (vanilla)
+- **Caching**: In-memory TTL-based cache
 
 ## Development
 
@@ -148,6 +168,45 @@ git tag
 # Checkout a specific version
 git checkout v1.1-working
 ```
+
+## Search Integration (Optional)
+
+The app includes web search capabilities to enhance content generation with real-time data about grants, local organizations, and resources.
+
+### Configuration
+
+Search is configured via environment variables in `.env`:
+
+```bash
+# Enable/disable search
+SEARCH_ENABLED=true
+
+# Choose provider (brave, google, bing)
+SEARCH_PROVIDER=brave
+
+# Provider API keys
+BRAVE_API_KEY=your_brave_api_key_here
+GOOGLE_SEARCH_API_KEY=
+GOOGLE_SEARCH_ENGINE_ID=
+BING_SEARCH_API_KEY=
+
+# Cache settings
+SEARCH_CACHE_TTL=86400        # 24 hours
+SEARCH_CACHE_MAX_SIZE=1000    # Max cached queries
+
+# Search behavior
+SEARCH_TIMEOUT=5              # Seconds
+SEARCH_MAX_RESULTS=10
+SEARCH_RETRY_ATTEMPTS=1
+```
+
+### Supported Providers
+
+- **Brave Search** (recommended): Free tier available, no credit card required
+- **Google Custom Search**: Requires API key and Custom Search Engine ID
+- **Bing Search**: Requires Azure subscription
+
+The app will work without search enabled, but won't include real-time web data in generated content.
 
 ## Troubleshooting
 
@@ -177,11 +236,18 @@ Feel free to fork this project and submit pull requests!
 
 ## License
 
-This project is open source and available for anyone to use and modify.
+MIT License - Copyright (c) 2025 Vihaan Kava and Peiang
+
+This project is open source and available for anyone to use and modify. See the [LICENSE](LICENSE) file for details.
 
 ## Support
 
 For questions or issues, please open an issue on GitHub.
+
+## Authors
+
+- **Vihaan Kava** - [@vihaankava](https://github.com/vihaankava)
+- **Peiang**
 
 ---
 
