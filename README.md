@@ -17,6 +17,11 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
 
 ## Setup Instructions
 
+### Quick Links
+
+- **Windows Users:** See [SETUP_WINDOWS.md](SETUP_WINDOWS.md) for detailed Windows-specific instructions
+- **macOS/Linux Users:** Follow the instructions below
+
 ### Prerequisites
 
 - Python 3.8 or higher
