@@ -15,12 +15,39 @@ An AI-powered tool that helps you develop nonprofit ideas into actionable startu
 - 🗑️ Easy idea management with delete functionality
 - ⚡ Smart caching for improved performance
 
+## Quick Start
+
+### One-Command Installation
+
+**macOS/Linux:**
+```bash
+git clone https://github.com/vihaankava/nonprofit.git && cd nonprofit/nonprofit_coach && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt && cp .env.example .env && echo "✅ Setup complete! Edit .env with your API key, then run: python app.py"
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/vihaankava/nonprofit.git; cd nonprofit/nonprofit_coach; python -m venv venv; .\venv\Scripts\activate; pip install -r requirements.txt; copy .env.example .env; Write-Host "✅ Setup complete! Edit .env with your API key, then run: python app.py"
+```
+
+**Windows (Command Prompt):**
+```cmd
+git clone https://github.com/vihaankava/nonprofit.git && cd nonprofit\nonprofit_coach && python -m venv venv && venv\Scripts\activate && pip install -r requirements.txt && copy .env.example .env && echo Setup complete! Edit .env with your API key, then run: python app.py
+```
+
+Then:
+1. Edit `.env` and add your [Anthropic API key](https://console.anthropic.com/)
+2. Run: `python app.py`
+3. Open: http://localhost:5001
+
+### Detailed Setup Guides
+
+- **Windows:** See [SETUP_WINDOWS.md](SETUP_WINDOWS.md)
+- **Linux:** See [SETUP_LINUX.md](SETUP_LINUX.md)
+- **macOS:** Follow instructions below
+
+---
+
 ## Setup Instructions
-
-### Quick Links
-
-- **Windows Users:** See [SETUP_WINDOWS.md](SETUP_WINDOWS.md) for detailed Windows-specific instructions
-- **macOS/Linux Users:** Follow the instructions below
 
 ### Prerequisites
 
